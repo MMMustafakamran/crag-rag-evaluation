@@ -1,0 +1,8 @@
+config/config.yaml
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+dataset/crag_task_1_and_2_dev_v4.jsonl

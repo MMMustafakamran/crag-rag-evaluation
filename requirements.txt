@@ -1,0 +1,10 @@
+# RAG assignment dependencies
+sentence-transformers
+google-generativeai
+flask
+flask-cors
+pyyaml
+numpy
+scikit-learn
+networkx
+tqdm
