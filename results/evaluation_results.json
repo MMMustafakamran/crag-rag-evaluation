@@ -1,0 +1,152 @@
+[
+  {
+    "query": "how many 3-point attempts did steve nash average per game in seasons he made the 50-40-90 club?",
+    "answer": "4 3-points attempts per game",
+    "pipelines": {
+      "RAG Fusion": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.01588102122772932,
+        "elapsed_s": 20.77
+      },
+      "HyDE": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.6162785053253174,
+        "elapsed_s": 20.46
+      },
+      "CRAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.6162785053253174,
+        "elapsed_s": 10.27
+      },
+      "Graph RAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.4401989323752267,
+        "elapsed_s": 10.72
+      }
+    }
+  },
+  {
+    "query": "what is a movie to feature a person who can create and control a device that can manipulate the laws of physics?",
+    "answer": "a movie that features a person who can create and control a device that can manipulate the laws of physics was \"the core\" in 2003, which starred aaron eckhart as a scientist who invents a device that can manipulate the laws of physics, allowing him to control gravity, time, and matter, and he must use this technology to save the earth from destruction after the planet's core suddenly stops rotating.",
+    "pipelines": {
+      "RAG Fusion": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.01588102122772932,
+        "elapsed_s": 20.45
+      },
+      "HyDE": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.42904908657073976,
+        "elapsed_s": 25.24
+      },
+      "CRAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.42904908657073976,
+        "elapsed_s": 10.3
+      },
+      "Graph RAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.42904908657073976,
+        "elapsed_s": 10.28
+      }
+    }
+  },
+  {
+    "query": "where did the ceo of salesforce previously work?",
+    "answer": "marc benioff spent 13 years at oracle, before launching salesforce.",
+    "pipelines": {
+      "RAG Fusion": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.01588102122772932,
+        "elapsed_s": 20.45
+      },
+      "HyDE": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.5147688984870911,
+        "elapsed_s": 22.67
+      },
+      "CRAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.5147688984870911,
+        "elapsed_s": 10.84
+      },
+      "Graph RAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.5147688984870911,
+        "elapsed_s": 10.25
+      }
+    }
+  },
+  {
+    "query": "which movie won the oscar best visual effects in 2021?",
+    "answer": "tenet",
+    "pipelines": {
+      "RAG Fusion": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.01588102122772932,
+        "elapsed_s": 20.42
+      },
+      "HyDE": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.7075246691703796,
+        "elapsed_s": 20.44
+      },
+      "CRAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.7075246691703796,
+        "elapsed_s": 10.22
+      },
+      "Graph RAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.23584155639012655,
+        "elapsed_s": 10.39
+      }
+    }
+  },
+  {
+    "query": "what company in the dow jones is the best performer today?",
+    "answer": "salesforce",
+    "pipelines": {
+      "RAG Fusion": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.01588102122772932,
+        "elapsed_s": 20.45
+      },
+      "HyDE": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.6652513027191163,
+        "elapsed_s": 20.51
+      },
+      "CRAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.6652513027191163,
+        "elapsed_s": 10.33
+      },
+      "Graph RAG": {
+        "prediction": "[Generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.]",
+        "correct": false,
+        "avg_score": 0.2217504342397054,
+        "elapsed_s": 10.34
+      }
+    }
+  }
+]

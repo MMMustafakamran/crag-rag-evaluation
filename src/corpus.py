@@ -93,7 +93,8 @@ def build_index(
         qid = example.get("interaction_id", "")
         for sr in example.get("search_results", []):
             snippet = (sr.get("page_snippet") or "").strip()
-            if snippet:
+            # Skip very short or empty snippets as they are usually noise
+            if snippet and len(snippet) > 30:
                 chunks.append(snippet)
                 metadata.append({
                     "page_name": sr.get("page_name", ""),

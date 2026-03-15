@@ -96,11 +96,18 @@ def generate_answer(
     else:
         prompt = build_prompt(query, chunks, cite=cite)
 
-    try:
-        response = generator.generate_content(prompt)
-        return response.text.strip()
-    except Exception as e:
-        return f"[Generation error: {e}]"
+    import time
+    for attempt in range(3):
+        time.sleep(10)
+        try:
+            response = generator.generate_content(prompt)
+            return response.text.strip()
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                time.sleep(20) # Extra wait on quota hit
+                continue
+            return f"[Generation error: {e}]"
+    return "[Generation error: Max retries exceeded]"
 
 
 def generate_text(prompt: str, generator: genai.GenerativeModel) -> str:
@@ -111,9 +118,16 @@ def generate_text(prompt: str, generator: genai.GenerativeModel) -> str:
     Returns:
         Generated text string, or empty string on error.
     """
-    try:
-        response = generator.generate_content(prompt)
-        return response.text.strip()
-    except Exception as e:
-        print(f"[generation] Warning: LLM call failed: {e}")
-        return ""
+    import time
+    for attempt in range(3):
+        time.sleep(10)
+        try:
+            response = generator.generate_content(prompt)
+            return response.text.strip()
+        except Exception as e:
+            if "429" in str(e) and attempt < 2:
+                time.sleep(20)
+                continue
+            print(f"[generation] Warning: LLM call failed: {e}")
+            return ""
+    return ""

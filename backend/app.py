@@ -51,25 +51,32 @@ def init_app():
     print("[backend] Initialized successfully.")
 
 @app.route("/api/query", methods=["POST"])
-def query():
-    data = request.json
-    query_text = data.get("query")
-    pipeline_name = data.get("pipeline", "rag_fusion").lower()
-    top_k = int(data.get("top_k", config.get("top_k", 5)))
-
+def query_pipeline():
     pipelines = {
         "rag_fusion": rag_fusion,
         "hyde": hyde,
         "crag": crag,
         "graph_rag": graph_rag
     }
-
-    pipeline = pipelines.get(pipeline_name, rag_fusion)
-    
     try:
-        result = pipeline.run(query_text, CORPUS, EMBEDDER, GENERATOR, top_k=top_k)
+        data = request.json
+        query = data.get("query", "")
+        pipeline_name = data.get("strategy", data.get("pipeline", "CRAG")).lower()
+        top_k = int(data.get("top_k", 5))
+
+        if not query:
+            return jsonify({"error": "No query provided"}), 400
+
+        pipeline = pipelines.get(pipeline_name)
+        if not pipeline:
+            return jsonify({"error": f"Invalid pipeline name: {pipeline_name}"}), 400
+
+        print(f"Running {pipeline_name} for query: {query}")
+        result = pipeline.run(query, CORPUS, EMBEDDER, GENERATOR, top_k=top_k)
         return jsonify(result)
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/samples", methods=["GET"])
@@ -84,6 +91,7 @@ def get_samples():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+init_app()
+
 if __name__ == "__main__":
-    init_app()
     app.run(host="0.0.0.0", port=5000, debug=True)
