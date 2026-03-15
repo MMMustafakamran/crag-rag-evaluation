@@ -6,3 +6,8 @@ __pycache__/
 venv/
 *.egg-info/
 dataset/crag_task_1_and_2_dev_v4.jsonl
+results/
+index/
+node_modules/
+dist/
+.DS_Store
