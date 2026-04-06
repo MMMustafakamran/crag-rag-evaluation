@@ -1,9 +1,14 @@
 import os
 import random
+import sys
 import yaml
 from pathlib import Path
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.corpus import load_index, build_index
 from src.retrieval import get_embedder
@@ -33,7 +38,7 @@ def init_app():
     
     embedding_model = config.get("embedding_model", "all-MiniLM-L6-v2")
     api_key = config.get("gemini_api_key", "")
-    generation_model = config.get("generation_model", "gemini-1.5-flash")
+    generation_model = config.get("generation_model", "gemini-2.0-flash")
     index_path = config.get("index_path", "index/crag_index")
     dataset_path = str(resolve_dataset_path(config.get("dataset_path")))
     index_build_limit = config.get("index_build_limit", 500)

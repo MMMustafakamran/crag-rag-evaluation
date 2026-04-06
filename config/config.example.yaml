@@ -10,8 +10,8 @@ dataset_path: "dataset/crag_task_1_and_2_dev_v4.jsonl"
 embedding_model: "all-MiniLM-L6-v2"
 
 # LLM for generation: Groq, Gemini, or other free provider only (no OpenAI).
-# Examples: Groq model name, or Gemini model name (e.g. gemini-1.5-flash).
-generation_model: "gemini-1.5-flash"
+# Examples: Groq model name, or Gemini model name (e.g. gemini-2.0-flash).
+generation_model: "gemini-2.0-flash"
 
 # Top-k chunks to retrieve from the global index per query
 top_k: 3
@@ -27,3 +27,6 @@ eval_limit: 10
 
 # Optional: Gemini API key. If omitted, the app falls back to a local extractive mode.
 gemini_api_key: ""
+
+# Optional: request throttle for external generation APIs.
+requests_per_minute: 30

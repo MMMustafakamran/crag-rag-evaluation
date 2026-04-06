@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
 from src.data_loader import load_examples
+from src.retrieval import get_embedder
 
 
 @dataclass
@@ -84,7 +84,7 @@ def build_index(
         A populated Corpus object.
     """
     print(f"[corpus] Loading dataset (limit={limit}) from {dataset_path} ...")
-    model = SentenceTransformer(embedding_model_name)
+    model = get_embedder(embedding_model_name)
 
     chunks: list[str] = []
     metadata: list[dict] = []

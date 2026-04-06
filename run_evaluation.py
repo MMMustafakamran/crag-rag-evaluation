@@ -15,6 +15,10 @@ from pathlib import Path
 
 import yaml
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 
 def load_config(config_path: str = "config/config.yaml") -> dict:
     if not Path(config_path).exists():
@@ -31,6 +35,8 @@ def main():
                         help="Force rebuild the corpus index even if it exists")
     parser.add_argument("--config", type=str, default="config/config.yaml",
                         help="Path to config.yaml")
+    parser.add_argument("--rpm", type=int, default=None,
+                        help="Max LLM requests per minute to respect during evaluation")
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -38,7 +44,8 @@ def main():
     dataset_path = config["dataset_path"]
     embedding_model = config.get("embedding_model", "all-MiniLM-L6-v2")
     api_key = config.get("gemini_api_key", "")
-    generation_model = config.get("generation_model", "gemini-1.5-flash")
+    generation_model = config.get("generation_model", "gemini-2.0-flash")
+    requests_per_minute = args.rpm if args.rpm is not None else config.get("requests_per_minute", 30)
     top_k = config.get("top_k", 5)
     index_path = config.get("index_path", "index/crag_index")
     index_build_limit = config.get("index_build_limit", 500)
@@ -59,7 +66,7 @@ def main():
         corpus = build_index(dataset_path, embedding_model, index_path, limit=index_build_limit)
 
     embedder = get_embedder(embedding_model)
-    generator = get_generator(api_key, generation_model)
+    generator = get_generator(api_key, generation_model, requests_per_minute=requests_per_minute)
 
     # ── 2. Load pipeline modules ─────────────────────────────────────────────
     from src.pipelines import rag_fusion, hyde, crag, graph_rag
@@ -80,6 +87,20 @@ def main():
     output_rows = []
 
     print(f"\n[eval] Running {len(pipelines)} pipelines on up to {eval_limit} examples ...\n")
+    estimated_calls_per_example = {
+        "RAG Fusion": 2,
+        "HyDE": 2,
+        "CRAG": 1,
+        "Graph RAG": 1,
+    }
+    calls_per_example = sum(estimated_calls_per_example.values())
+    estimated_total_calls = eval_limit * calls_per_example
+    estimated_minutes = estimated_total_calls / max(requests_per_minute, 1)
+    print(
+        f"[eval] Quota plan: about {calls_per_example} LLM calls/example, "
+        f"~{estimated_total_calls} calls total, capped at {requests_per_minute} RPM "
+        f"(~{estimated_minutes:.1f} min best case).\n"
+    )
 
     for i, example in enumerate(load_examples(path=dataset_path, limit=eval_limit)):
         query = example["query"]
