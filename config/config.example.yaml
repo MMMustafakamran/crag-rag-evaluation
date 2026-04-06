@@ -17,4 +17,13 @@ generation_model: "gemini-1.5-flash"
 top_k: 3
 
 # Optional: path to save/load the embedding index (so you don't rebuild every time)
-# index_path: "index/crag_index"
+index_path: "index/crag_index"
+
+# Optional: cap index build size for local experiments. Set to null for the full corpus.
+index_build_limit: 500
+
+# Optional: evaluation subset size.
+eval_limit: 10
+
+# Optional: Gemini API key. If omitted, the app falls back to a local extractive mode.
+gemini_api_key: ""

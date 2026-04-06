@@ -69,7 +69,7 @@ def build_index(
     dataset_path: str,
     embedding_model_name: str = "all-MiniLM-L6-v2",
     index_path: Optional[str] = None,
-    limit: Optional[int] = 500,
+    limit: Optional[int] = None,
 ) -> Corpus:
     """
     Build the global corpus from the dataset and embed all chunks.
@@ -78,7 +78,7 @@ def build_index(
         dataset_path: path to the JSONL file.
         embedding_model_name: sentence-transformers model name.
         index_path: if given, save the built index here.
-        limit: max number of dataset rows to read (None = all). Keep small for speed.
+        limit: max number of dataset rows to read (None = all).
 
     Returns:
         A populated Corpus object.

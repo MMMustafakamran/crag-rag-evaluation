@@ -11,7 +11,20 @@ import google.generativeai as genai
 _generator_cache: dict[str, genai.GenerativeModel] = {}
 
 
-def get_generator(api_key: str, model_name: str = "gemini-1.5-flash") -> genai.GenerativeModel:
+class FallbackGenerator:
+    """
+    Local fallback used when no API key is configured.
+
+    This keeps evaluation and the frontend functional in offline/demo setups.
+    """
+
+    is_fallback = True
+
+    def __init__(self, model_name: str = "fallback-extractive") -> None:
+        self.model_name = model_name
+
+
+def get_generator(api_key: str, model_name: str = "gemini-1.5-flash"):
     """
     Configure Gemini and return a cached GenerativeModel.
 
@@ -22,11 +35,29 @@ def get_generator(api_key: str, model_name: str = "gemini-1.5-flash") -> genai.G
     Returns:
         Configured GenerativeModel instance.
     """
+    if not api_key:
+        return FallbackGenerator()
+
     cache_key = f"{api_key[:8]}:{model_name}"
     if cache_key not in _generator_cache:
         genai.configure(api_key=api_key)
         _generator_cache[cache_key] = genai.GenerativeModel(model_name)
     return _generator_cache[cache_key]
+
+
+def _extractive_fallback_answer(query: str, chunks: list[dict], cite: bool = False) -> str:
+    """
+    Cheap fallback answer when the external LLM is unavailable.
+    """
+    if not chunks:
+        return "I don't know."
+
+    best = max(chunks, key=lambda chunk: chunk.get("score", 0))
+    answer = best.get("text", "").strip() or "I don't know."
+    if cite:
+        source = best.get("page_name") or best.get("page_url") or "Retrieved source"
+        answer = f"{answer}\n\nSource: {source}"
+    return answer
 
 
 def build_prompt(query: str, chunks: list[dict], cite: bool = False) -> str:
@@ -86,6 +117,9 @@ def generate_answer(
     Returns:
         Generated answer string.
     """
+    if getattr(generator, "is_fallback", False):
+        return _extractive_fallback_answer(query, chunks, cite=cite)
+
     if not chunks:
         # No-retrieval fallback: answer from parametric knowledge only
         prompt = (
@@ -96,18 +130,15 @@ def generate_answer(
     else:
         prompt = build_prompt(query, chunks, cite=cite)
 
-    import time
     for attempt in range(3):
-        time.sleep(10)
         try:
             response = generator.generate_content(prompt)
             return response.text.strip()
         except Exception as e:
             if "429" in str(e) and attempt < 2:
-                time.sleep(20) # Extra wait on quota hit
                 continue
-            return f"[Generation error: {e}]"
-    return "[Generation error: Max retries exceeded]"
+            return _extractive_fallback_answer(query, chunks, cite=cite)
+    return _extractive_fallback_answer(query, chunks, cite=cite)
 
 
 def generate_text(prompt: str, generator: genai.GenerativeModel) -> str:
@@ -118,15 +149,15 @@ def generate_text(prompt: str, generator: genai.GenerativeModel) -> str:
     Returns:
         Generated text string, or empty string on error.
     """
-    import time
+    if getattr(generator, "is_fallback", False):
+        return ""
+
     for attempt in range(3):
-        time.sleep(10)
         try:
             response = generator.generate_content(prompt)
             return response.text.strip()
         except Exception as e:
             if "429" in str(e) and attempt < 2:
-                time.sleep(20)
                 continue
             print(f"[generation] Warning: LLM call failed: {e}")
             return ""

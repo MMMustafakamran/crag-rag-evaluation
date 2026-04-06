@@ -3,5 +3,17 @@ Basic RAG: query -> retrieve top-k from global index -> generate answer.
 Do not remove or rename this file.
 """
 
-# TODO: Implement run(query: str, index, embedder, top_k, generator) -> (retrieved_passages, answer).
-# Use retrieval.retrieve(index, query, top_k) to get chunks from the global corpus, then generation.generate(query, passages).
+from __future__ import annotations
+
+from src.generation import generate_answer
+from src.retrieval import retrieve
+
+
+def run(query: str, corpus, embedder, generator, top_k: int = 5) -> dict:
+    retrieved = retrieve(query, embedder, corpus, top_k=top_k)
+    answer = generate_answer(query, retrieved, generator)
+    return {
+        "retrieved": retrieved,
+        "answer": answer,
+        "meta": {"pipeline": "basic_rag"},
+    }

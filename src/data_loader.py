@@ -12,6 +12,26 @@ from typing import Generator, Optional
 DEFAULT_DATASET_PATH = "dataset/crag_task_1_and_2_dev_v4.jsonl"
 
 
+def resolve_dataset_path(path: Optional[str] = None) -> Path:
+    """
+    Resolve the dataset path.
+
+    The local workspace stores the dataset inside a directory named
+    `crag_task_1_and_2_dev_v4.jsonl/` containing the real jsonl file, so this
+    helper accepts either the file path or the parent directory.
+    """
+    file_path = Path(path or DEFAULT_DATASET_PATH)
+    if not file_path.is_absolute():
+        file_path = Path.cwd() / file_path
+
+    if file_path.is_dir():
+        nested = file_path / "crag_task_1_and_2_dev_v4.jsonl"
+        if nested.exists():
+            return nested
+
+    return file_path
+
+
 def load_examples(
     path: Optional[str] = None,
     limit: Optional[int] = None,
@@ -32,9 +52,7 @@ def load_examples(
           - search_results: list[dict] with 'page_snippet', 'page_name', 'page_url', etc.
         Also includes interaction_id, domain, question_type for debugging.
     """
-    file_path = Path(path or DEFAULT_DATASET_PATH)
-    if not file_path.is_absolute():
-        file_path = Path.cwd() / file_path
+    file_path = resolve_dataset_path(path)
 
     if not file_path.exists():
         raise FileNotFoundError(f"Dataset not found: {file_path}")

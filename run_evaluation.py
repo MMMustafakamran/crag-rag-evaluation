@@ -17,6 +17,8 @@ import yaml
 
 
 def load_config(config_path: str = "config/config.yaml") -> dict:
+    if not Path(config_path).exists():
+        config_path = "config/config.example.yaml"
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 

@@ -8,6 +8,8 @@ const PIPELINES = [
   { id: 'graph_rag', name: 'Graph RAG', desc: 'Similarity Graph BFS' },
 ];
 
+const API_BASE = 'http://localhost:5000';
+
 function App() {
   const [query, setQuery] = useState('');
   const [pipeline, setPipeline] = useState('rag_fusion');
@@ -18,10 +20,10 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/samples')
+    fetch(`${API_BASE}/api/samples`)
       .then(res => res.json())
-      .then(data => setSamples(data))
-      .catch(err => console.error('Failed to fetch samples', err));
+      .then(data => setSamples(Array.isArray(data) ? data : []))
+      .catch(() => setSamples([]));
   }, []);
 
   const handleRun = async () => {
@@ -30,7 +32,7 @@ function App() {
     setResult(null);
     setError(null);
     try {
-      const resp = await fetch('http://localhost:5000/api/query', {
+      const resp = await fetch(`${API_BASE}/api/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, pipeline, top_k: topK }),
@@ -64,13 +66,15 @@ function App() {
             />
           </div>
 
-          <div className="samples">
-            {samples.map(s => (
-              <button key={s.id} onClick={() => setQuery(s.query)} className="sample-btn">
-                {s.query.length > 40 ? s.query.substring(0, 40) + '...' : s.query}
-              </button>
-            ))}
-          </div>
+          {samples.length > 0 && (
+            <div className="samples">
+              {samples.map(s => (
+                <button key={s.id} onClick={() => setQuery(s.query)} className="sample-btn">
+                  {s.query.length > 40 ? s.query.substring(0, 40) + '...' : s.query}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="controls">
             <div className="field-group">
@@ -92,7 +96,13 @@ function App() {
             <div className="run-section">
                <div className="field-group">
                 <label>Top K Chunks</label>
-                <input type="number" value={topK} onChange={(e) => setTopK(parseInt(e.target.value))} min="1" max="20" />
+                <input
+                  type="number"
+                  value={topK}
+                  onChange={(e) => setTopK(Number.parseInt(e.target.value, 10) || 1)}
+                  min="1"
+                  max="20"
+                />
               </div>
               <button className="run-btn" onClick={handleRun} disabled={loading}>
                 {loading ? 'Processing...' : 'Run Pipeline'}

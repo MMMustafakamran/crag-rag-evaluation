@@ -244,3 +244,28 @@ input[type="number"] {
   font-size: 0.9rem;
   opacity: 0.8;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .controls,
+  .run-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pipeline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .run-btn,
+  input[type="number"] {
+    width: 100%;
+  }
+
+  .chunk-header {
+    flex-wrap: wrap;
+  }
+}

@@ -9,7 +9,7 @@ from src.corpus import load_index, build_index
 from src.retrieval import get_embedder
 from src.generation import get_generator
 from src.pipelines import rag_fusion, hyde, crag, graph_rag
-from src.data_loader import load_examples
+from src.data_loader import load_examples, resolve_dataset_path
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
@@ -35,7 +35,7 @@ def init_app():
     api_key = config.get("gemini_api_key", "")
     generation_model = config.get("generation_model", "gemini-1.5-flash")
     index_path = config.get("index_path", "index/crag_index")
-    dataset_path = config.get("dataset_path", "dataset/crag_task_1_and_2_dev_v4.jsonl/crag_task_1_and_2_dev_v4.jsonl")
+    dataset_path = str(resolve_dataset_path(config.get("dataset_path")))
     index_build_limit = config.get("index_build_limit", 500)
 
     # 1. Load or build index
@@ -82,7 +82,7 @@ def query_pipeline():
 @app.route("/api/samples", methods=["GET"])
 def get_samples():
     """Returns a few sample queries from the dataset."""
-    dataset_path = config["dataset_path"]
+    dataset_path = str(resolve_dataset_path(config.get("dataset_path")))
     try:
         # Load first 100 and pick 5 random
         examples = list(load_examples(path=dataset_path, limit=100))

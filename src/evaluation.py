@@ -8,6 +8,9 @@ import re
 import string
 
 
+_CITATION_RE = re.compile(r"\[[0-9,\s]+\]|\((?:retrieved|source|sources?):.*?\)", re.IGNORECASE)
+
+
 def normalize(text: str) -> str:
     """
     Normalize text for comparison:
@@ -15,6 +18,7 @@ def normalize(text: str) -> str:
     - strip punctuation
     - collapse whitespace
     """
+    text = _CITATION_RE.sub(" ", text)
     text = text.lower()
     text = text.translate(str.maketrans("", "", string.punctuation))
     text = re.sub(r"\s+", " ", text).strip()
@@ -40,6 +44,9 @@ def is_correct(prediction: str, answer: str, alt_ans: list[str]) -> bool:
             return True
         # Gold is contained in prediction (model often gives verbose answers)
         if gold in pred_norm:
+            return True
+        # Prediction is the concise gold form while the gold includes explanation.
+        if pred_norm and pred_norm in gold:
             return True
 
     return False
